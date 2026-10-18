@@ -19,7 +19,7 @@ mapa = 1 - parula(256);                   % negativo del mapa parula
 figure('Name', 'Punto 1');
 imshow(gris); colormap(gca, mapa); colorbar;
 title('Escala de grises con mapa de color negativo de parula');
-exportgraphics(gca, fullfile(dirRes, 'p1_gris_negParula.png'));
+exportgraphics(gca, fullfile(dirRes, 'p1_gris_negParula.png'), 'Resolution', 300);
 imwrite(gris, mapa, fullfile(dirRes, 'p1_gris_negParula_indexada.png'));
 
 % Un uint8 de nivel 170 usa la fila 171 del mapa (indices 0..255 -> 1..256)
