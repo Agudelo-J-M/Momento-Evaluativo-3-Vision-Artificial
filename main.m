@@ -16,7 +16,7 @@ imwrite(I, fullfile(dirRes, 'p0_original.png'));
 gris = rgb2gray(I);
 mapa = 1 - parula(256);                   % negativo del mapa parula
 
-f = figure('Name', 'Punto 1');
+figure('Name', 'Punto 1');
 imshow(gris); colormap(gca, mapa); colorbar;
 title('Escala de grises con mapa de color negativo de parula');
 exportgraphics(gca, fullfile(dirRes, 'p1_gris_negParula.png'));
@@ -45,10 +45,11 @@ for k = 1:size(comps, 1)
 end
 
 %% PUNTO 3 - YCbCr: negativo(log(Cr))
-ycc = rgb2ycbcr(I);
+% Se trabaja en double para no acumular redondeos de uint8 entre pasos
+ycc = rgb2ycbcr(im2double(I));
 Cr  = ycc(:,:,3);
 ycc(:,:,3) = negativo(transfLogaritmica(Cr));      % Paso 2 y 3
-I3 = ycbcr2rgb(ycc);                               % Paso 4
+I3 = im2uint8(ycbcr2rgb(ycc));                     % Paso 4
 mostrarPar(I, I3, 'Punto 3: YCbCr, Cr -> negativo(log(Cr))');
 imwrite(I3, fullfile(dirRes, 'p3_transformada.png'));
 

@@ -6,7 +6,8 @@ carpeta = fullfile(fileparts(fileparts(mfilename('fullpath'))), 'imagenes');
 archivos = dir(fullfile(carpeta, 'imagen_generada.*'));
 
 if ~isempty(archivos)
-    I = imread(fullfile(carpeta, archivos(1).name));
+    [I, mapa] = imread(fullfile(carpeta, archivos(1).name));
+    if ~isempty(mapa), I = ind2rgb(I, mapa); end   % PNG indexado
 else
     warning(['No se encontro "imagenes/imagen_generada.*". ' ...
              'Se usa peppers.png como imagen de prueba.']);

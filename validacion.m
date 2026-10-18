@@ -19,7 +19,7 @@ rec = im2uint8(hsi2rgb(rgb2hsi(I)));
 fprintf('SSIM RGB->HSI->RGB   : %.6f\n', ssim(rec, I));
 
 % YCbCr (Image Processing Toolbox)
-rec = ycbcr2rgb(rgb2ycbcr(I));
+rec = im2uint8(ycbcr2rgb(rgb2ycbcr(im2double(I))));
 fprintf('SSIM RGB->YCbCr->RGB : %.6f\n', ssim(rec, I));
 
 % YIQ (Image Processing Toolbox)

@@ -11,9 +11,10 @@ H = theta;
 H(B > G) = 2*pi - H(B > G);
 H = H / (2*pi);
 
-S = 1 - 3 .* min(min(R, G), B) ./ (R + G + B + eps);
-H(S == 0) = 0;
-
 I = (R + G + B) / 3;
+
+S = 1 - 3 .* min(min(R, G), B) ./ (R + G + B + eps);
+S(I == 0) = 0;                          % el negro no tiene saturacion
+H(S == 0) = 0;                          % los grises no tienen tono
 hsi = cat(3, H, S, I);
 end
