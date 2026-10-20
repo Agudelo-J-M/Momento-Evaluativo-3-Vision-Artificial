@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Momento Evaluativo 3 – Visión Artificial</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400..700&family=IBM+Plex+Sans:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+html,body{margin:0;height:100%;background:#0E1013;overflow:hidden;font-family:'IBM Plex Sans',Arial,sans-serif}
+#stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:0 0}
+section{position:absolute;inset:0;width:1920px;height:1080px;box-sizing:border-box;overflow:hidden;opacity:0;pointer-events:none;transition:opacity .4s}
+section.on{opacity:1;pointer-events:auto}
+section *{margin:0;box-sizing:border-box} aside{display:none}
+h1{font-size:96px;font-weight:600;line-height:1.1} h2{font-size:64px;font-weight:600;line-height:1.15}
+h3{font-size:44px;font-weight:600;line-height:1.2} p{font-size:32px;line-height:1.4}
+table{border-collapse:collapse;width:100%} th,td{padding:.35em .6em;border-bottom:1px solid rgba(238,233,223,.18)} th{font-weight:600}
+a{color:inherit}
+#hud{position:fixed;right:16px;bottom:12px;color:#A9B0BB;font:14px 'IBM Plex Sans',Arial,sans-serif;opacity:.7;user-select:none}
+#notes{position:fixed;left:0;right:0;bottom:0;max-height:35%;overflow:auto;background:rgba(14,16,19,.95);color:#EEE9DF;
+  font:18px/1.5 'IBM Plex Sans',Arial,sans-serif;padding:16px 24px;white-space:pre-wrap;display:none;border-top:2px solid #E8A93B}
+</style></head><body>
+<div id="stage">
+<section id="cover" data-transition="fade" style="background:#15181D;color:#EEE9DF;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:row;align-items:center;gap:96px">
+<div style="flex:1;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:28px;color:#E8A93B;letter-spacing:4px;text-transform:uppercase;font-weight:600">Introducción a Visión Artificial</p>
+<h1 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:112px;font-weight:700;line-height:1.05">Momento Evaluativo 3</h1>
+<p style="font-size:36px;color:#C9CED6;line-height:1.4">Procesamiento del color en imágenes digitales con MATLAB</p>
+<div style="display:flex;flex-direction:column;gap:8px;border-left:4px solid #E8A93B;padding:8px 0 8px 32px">
+<p style="font-size:28px;color:#A9B0BB">Docente: Ricardo Franco Ceballos</p>
+<p style="font-size:28px;color:#A9B0BB">Integrantes:</p>
+<p style="font-size:28px;color:#EEE9DF;line-height:1.5">Jhon Dayron Jaramillo Laurens<br>Johan Santiago Marín Ríos<br>Sebastián Berrio Chavarría<br>Mauricio Agudelo Jiménez</p>
+</div>
+</div>
+<img src="../resultados/p0_original.png" alt="Imagen generada: mujer sonriente con bufanda roja frente a una puerta azul en una calle colonial" style="width:720px;height:720px;object-fit:cover;border-radius:24px">
+<aside>Buenos días, profesor Ricardo. Somos Jhon Dayron Jaramillo Laurens, Johan Santiago Marín Ríos, Sebastián Berrio Chavarría y Mauricio Agudelo Jiménez. En este video presentamos el Momento Evaluativo 3 de Introducción a Visión Artificial, sobre procesamiento del color, desarrollado en MATLAB.</aside>
+</section>
+
+<section id="imagen" data-transition="fade" style="background:#15181D;color:#EEE9DF;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:row;align-items:center;gap:96px">
+<img src="../resultados/p0_original.png" alt="Imagen generada: mujer con bufanda roja, puerta azul, flores amarillas y moradas, canasta de frutas y calle empedrada" style="width:760px;height:760px;object-fit:cover;border-radius:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;color:#E8A93B;letter-spacing:4px;text-transform:uppercase;font-weight:600">Nuestra imagen</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:56px;font-weight:700;line-height:1.1">Generada con Bing Image Creator</h2>
+<div style="background:#1F242C;border-radius:16px;padding:36px;border-left:4px solid #E8A93B">
+<p style="font-size:28px;line-height:1.5;color:#D9DDE3;font-style:italic">“Fotografía realista de una mujer sonriente con bufanda roja sentada frente a una puerta de madera azul en una calle colonial, macetas con flores amarillas y moradas, frutas de colores en una canasta, cielo azul con nubes, luz de tarde con sombras marcadas, alto detalle de texturas”</p>
+</div>
+<div style="display:flex;gap:16px">
+<p style="font-size:24px;background:#2A303A;padding:10px 24px;border-radius:999px;color:#EEE9DF">1024 × 1024 × 3</p>
+<p style="font-size:24px;background:#2A303A;padding:10px 24px;border-radius:999px;color:#EEE9DF">uint8 · RGB</p>
+</div>
+</div>
+<aside>Generamos esta imagen con Bing Image Creator, en formato cuadrado de 1024 por 1024 por 3. Pedimos una mujer con bufanda roja frente a una puerta azul en una calle colonial, con flores amarillas y moradas y una canasta de frutas. La elegimos porque reúne colores muy distintos: el rojo de la bufanda, el azul de la puerta, las flores, la piel, las paredes crema y el empedrado con sol y sombra. Así podemos ver qué le hace cada técnica a cada color.</aside>
+</section>
+
+<section id="codigo" data-transition="fade" style="background:#1B1F25;color:#EEE9DF;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;color:#E8A93B;letter-spacing:4px;text-transform:uppercase;font-weight:600">Antes de empezar</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:56px;font-weight:700;line-height:1.1">Cómo organizamos el código</h2>
+</div>
+<div style="display:flex;flex-direction:row;gap:48px;flex:1">
+<div style="flex:1;display:flex;flex-direction:column;gap:24px;background:#252B34;border-radius:16px;padding:40px">
+<h3 style="font-size:32px;font-weight:600;color:#EEE9DF">Funciones propias</h3>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;line-height:1.7;color:#C9CED6">negativo.m<br>transfLogaritmica.m<br>transfGamma.m<br>transfLinealTrozos.m<br>rgb2cmy.m · cmy2rgb.m<br>rgb2cmyk.m · cmyk2rgb.m<br>rgb2hsi.m · hsi2rgb.m</p>
+<p style="font-size:26px;color:#A9B0BB;line-height:1.4">YCbCr y YIQ: <b>rgb2ycbcr</b> y <b>rgb2ntsc</b> del Image Processing Toolbox.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:24px;background:#252B34;border-radius:16px;padding:40px">
+<h3 style="font-size:32px;font-weight:600;color:#EEE9DF">Validación: RGB → espacio → RGB</h3>
+<table style="font-size:28px;color:#EEE9DF;font-family:'IBM Plex Sans', Arial, sans-serif">
+<tr><th style="width:60%;text-align:left">Espacio de color</th><th style="width:40%;text-align:right">SSIM</th></tr>
+<tr><td>CMY</td><td style="text-align:right">1.0000</td></tr>
+<tr><td>CMYK</td><td style="text-align:right">1.0000</td></tr>
+<tr><td>HSI</td><td style="text-align:right">1.0000</td></tr>
+<tr><td>YCbCr</td><td style="text-align:right">1.0000</td></tr>
+<tr><td>YIQ</td><td style="text-align:right">1.0000</td></tr>
+</table>
+</div>
+</div>
+<aside>Un script principal resuelve los ocho puntos. Construimos nuestras propias funciones de negativo, logarítmica, gamma y lineal a trozos, y las conversiones a CMY, CMYK y HSI con sus inversas. Para YCbCr y YIQ usamos las funciones del toolbox. Para validarlas, convertimos la imagen a cada espacio y de vuelta a RGB: el SSIM contra la original dio 1 en los cinco casos.</aside>
+</section>
+
+<section id="p1" data-section="Puntos 1 y 2: escala de grises y componentes de color" data-transition="fade" style="background:#15181D;color:#EEE9DF;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:row;align-items:center;gap:80px">
+<img src="../resultados/p1_gris_negParula_indexada.png" alt="Imagen en escala de grises mostrada con el negativo del mapa de color parula: zonas oscuras en amarillo y zonas claras en azul" style="width:780px;height:780px;object-fit:cover;border-radius:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;color:#E8A93B;letter-spacing:4px;text-transform:uppercase;font-weight:600">Punto 1 · 0.4</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:56px;font-weight:700;line-height:1.1">Grises con el negativo de parula</h2>
+<div style="background:#1F242C;border-radius:16px;padding:32px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;line-height:1.6;color:#C9CED6">gris = rgb2gray(I);<br>mapa = 1 - parula(256);<br>imshow(gris); colormap(mapa);<br>t = mapa(170 + 1, :)</p>
+</div>
+<div style="display:flex;flex-direction:row;align-items:center;gap:32px">
+<div style="width:150px;height:150px;background:rgb(126,51,166);border-radius:16px;border:2px solid #EEE9DF"></div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<p style="font-size:28px;color:#A9B0BB">Nivel 170 → fila 171</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:40px;font-weight:600;color:#EEE9DF">[126  51  166]</p>
+<p style="font-size:24px;color:#A9B0BB">[0.4956  0.2007  0.6520]</p>
+</div>
+</div>
+</div>
+<aside>Punto 1. Convertimos la imagen a grises con rgb2gray y la mostramos con el negativo de parula, es decir, uno menos el mapa parula. Como parula va de azul en lo oscuro a amarillo en lo claro, el negativo lo invierte: el jean, la puerta, el cabello y las sombras se ven amarillos y naranjas, y las paredes al sol se ven azules. Para la tripleta: el nivel 170 de una imagen de 8 bits usa la fila 171 del mapa, porque MATLAB indexa desde uno. Su valor es 126, 51, 166: un morado.</aside>
+</section>
+
+<section id="p2a" data-transition="fade" style="background:#15181D;color:#EEE9DF;font-family:'IBM Plex Sans', Arial, sans-serif;padding:112px 128px;display:flex;flex-direction:column;gap:36px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;color:#E8A93B;letter-spacing:4px;text-transform:uppercase;font-weight:600">Punto 2 · 0.6</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:56px;font-weight:700;line-height:1.1">Componentes RGB y CMYK</h2>
+</div>
+<div style="display:grid;grid-template-columns:repeat(4, 1fr);gap:28px 40px;justify-items:center">
+<div style="display:flex;flex-direction:column;gap:8px;align-items:center"><img src="../resultados/p2_R.png" alt="Componente R" style="width:290px;height:290px;object-fit:cover;border-radius:12px"><p style="font-size:24px;color:#A9B0BB;font-weight:600">R</p></div>
+<div style="display:flex;flex-direction:column;gap:8px;align-items:center"><img src="../resultados/p2_G.png" alt="Componente G" style="width:290px;height:290px;object-fit:cover;border-radius:12px"><p style="font-size:24px;color:#A9B0BB;font-weight:600">G</p></div>
+<div style="display:flex;flex-direction:column;gap:8px;align-items:center"><img src="../resultados/p2_B.png" alt="Componente B" style="width:290px;height:290px;object-fit:cover;border-radius:12px"><p style="font-size:24px;color:#A9B0BB;font-weight:600">B</p></div>
+<div style="display:flex;flex-direction:column;gap:16px;background:#1F242C;border-radius:12px;padding:28px;width:290px;height:290px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;line-height:1.6;color:#C9CED6">CMY = 1 − RGB<br>K = min(C,M,Y)<br>C′ = (C−K)/(1−K)</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;align-items:center"><img src="../resultados/p2_C.png" alt="Componente C" style="width:290px;height:290px;object-fit:cover;border-radius:12px"><p style="font-size:24px;color:#A9B0BB;font-weight:600">C</p></div>
+<div style="display:flex;flex-direction:column;gap:8px;align-items:center"><img src="../resultados/p2_M.png" alt="Componente M" style="width:290px;height:290px;object-fit:cover;border-radius:12px"><p style="font-size:24px;color:#A9B0BB;font-weight:600">M</p></div>
+<div style="display:flex;flex-direction:column;gap:8px;align-items:center"><img src="../resultados/p2_Y.png" alt="Componente Y" style="width:290px;height:290px;object-fit:cover;border-radius:12px"><p style="font-size:24px;color:#A9B0BB;font-weight:600">Y</p></div>
+<div style="display:flex;flex-direction:column;gap:8px;align-items:center"><img src="../resultados/p2_K.png" alt="Componente K" style="width:290px;height:290px;object-fit:cover;border-radius:12px"><p style="font-size:24px;color:#A9B0BB;font-weight:600">K</p></div>
+</div>
+<aside>Punto 2. R, G y B son los tres planos de la imagen. La bufanda es clara en el rojo y oscura en el verde y el azul; la puerta, al revés. Para CMYK calculamos CMY como uno menos RGB, K como el mínimo de los tres, y normalizamos. Como la escena es cálida, el cian solo aparece en la puerta y el jean. El magenta resalta la bufanda, las flores moradas y las frutas; el amarillo, las flores amarillas; y K se queda con las sombras.</aside>
+</section>
+
+<section id="p2b" data-transition="fade" style="background:#15181D;color:#EEE9DF;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;color:#E8A93B;letter-spacing:4px;text-transform:uppercase;font-weight:600">Punto 2 · 0.6</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:56px;font-weight:700;line-height:1.1">Componentes HSI</h2>
+</div>
+<div style="display:flex;flex-direction:row;gap:48px;justify-content:space-between">
+<div style="flex:1;display:flex;flex-direction:column;gap:16px"><img src="../resultados/p2_Saturacion.png" alt="Componente de saturación" style="width:500px;height:500px;object-fit:cover;border-radius:16px"><h3 style="font-size:32px;font-weight:600">Saturación</h3><p style="font-size:24px;color:#A9B0BB;line-height:1.4">Máxima en la bufanda y las flores; baja en la camisa blanca.</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px"><img src="../resultados/p2_Tono.png" alt="Componente de tono" style="width:500px;height:500px;object-fit:cover;border-radius:16px"><h3 style="font-size:32px;font-weight:600">Tono</h3><p style="font-size:24px;color:#A9B0BB;line-height:1.4">La puerta azul queda gris claro; la bufanda, blanca por estar cerca de 360°.</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px"><img src="../resultados/p2_Intensidad.png" alt="Componente de intensidad" style="width:500px;height:500px;object-fit:cover;border-radius:16px"><h3 style="font-size:32px;font-weight:600">Intensidad</h3><p style="font-size:24px;color:#A9B0BB;line-height:1.4">I = (R+G+B)/3: muy parecida a la imagen en grises.</p></div>
+</div>
+<aside>En HSI, la saturación es máxima en la bufanda y las flores, y baja en la camisa blanca. En el tono, la puerta queda gris claro, cerca de 220 grados, y la piel y las paredes casi negras, cerca de cero. La bufanda sale blanca porque su rojo tira a magenta, cerca de 360 grados: el tono es circular. La intensidad es casi igual a la imagen en grises.</aside>
+</section>
+
+<section id="p3" data-section="Puntos 3 a 7: transformaciones de color y realce" data-transition="fade" style="background:#15181D;color:#EEE9DF;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;color:#E8A93B;letter-spacing:4px;text-transform:uppercase;font-weight:600">Punto 3 · 0.6 · YCbCr</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:56px;font-weight:700;line-height:1.1">Cr → negativo(log(Cr))</h2>
+</div>
+<div style="display:flex;flex-direction:row;gap:40px">
+<div style="display:flex;flex-direction:column;gap:8px"><img src="../resultados/p0_original.png" alt="Imagen original" style="width:520px;height:520px;object-fit:cover;border-radius:16px"><p style="font-size:24px;color:#A9B0BB">Original</p></div>
+<div style="display:flex;flex-direction:column;gap:8px"><img src="../resultados/p3_transformada.png" alt="Imagen transformada en YCbCr: toda la escena en tonos verdes" style="width:520px;height:520px;object-fit:cover;border-radius:16px"><p style="font-size:24px;color:#A9B0BB">Transformada</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:24px;padding:0 0 0 8px">
+<p style="font-size:28px;line-height:1.4">Todo se vuelve verde: el <b>rojo medio cae de 0.51 a 0.04</b>.</p>
+<p style="font-size:28px;line-height:1.4">La bufanda, lo más rojo, queda en el <b>verde más oscuro</b>.</p>
+<p style="font-size:28px;line-height:1.4">La puerta azul casi no cambia: <b>ya tenía poco rojo</b>.</p>
+<p style="font-size:28px;line-height:1.4">Las texturas se conservan porque <b>Y no cambia</b>.</p>
+</div>
+</div>
+<aside>Punto 3. En YCbCr aplicamos a Cr la logarítmica y luego el negativo. Cr mide cuánto rojo tiene cada píxel. La logarítmica sube sus valores y el negativo los manda casi a cero, así que al volver a RGB el rojo desaparece: su promedio cae de 0.51 a 0.04 y toda la escena se vuelve verde. Como el negativo invierte el orden, lo más rojo, la bufanda, queda en el verde más oscuro. La puerta azul casi no cambia porque ya tenía poco rojo. Y las texturas de la madera, el empedrado y el rostro se conservan, porque la luminancia no se tocó.</aside>
+</section>
+
+<section id="p4" data-transition="fade" style="background:#15181D;color:#EEE9DF;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;color:#E8A93B;letter-spacing:4px;text-transform:uppercase;font-weight:600">Punto 4 · 0.6 · YIQ</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:56px;font-weight:700;line-height:1.1">Y → Y<span style="color:#E8A93B">^1.5</span> y Q → −Q</h2>
+</div>
+<div style="display:flex;flex-direction:row;gap:40px">
+<div style="display:flex;flex-direction:column;gap:8px"><img src="../resultados/p0_original.png" alt="Imagen original" style="width:520px;height:520px;object-fit:cover;border-radius:16px"><p style="font-size:24px;color:#A9B0BB">Original</p></div>
+<div style="display:flex;flex-direction:column;gap:8px"><img src="../resultados/p4_transformada.png" alt="Imagen transformada en YIQ: más oscura, paredes rosadas, flores amarillas en salmón y hojas moradas" style="width:520px;height:520px;object-fit:cover;border-radius:16px"><p style="font-size:24px;color:#A9B0BB">Transformada</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:24px;padding:0 0 0 8px">
+<p style="font-size:28px;line-height:1.4">Más oscura: <b>brillo medio 0.58 → 0.47</b>, sombras más densas.</p>
+<p style="font-size:28px;line-height:1.4">Verde ↔ morado: <b>hojas y enredadera moradas</b>, flores moradas verdes.</p>
+<p style="font-size:28px;line-height:1.4">Amarillo → <b>salmón</b>; bufanda roja → <b>óxido</b>; paredes → rosadas.</p>
+<p style="font-size:28px;line-height:1.4">Puerta y jean <b>casi iguales</b>: su Q es cercano a 0.</p>
+</div>
+</div>
+<aside>Punto 4. En YIQ aplicamos gamma 1.5 a la luminancia y multiplicamos Q por menos uno. La gamma oscurece la imagen: el brillo medio baja de 0.58 a 0.47, sobre todo en las sombras del escalón y de la calle. Q es el eje del verde al morado, así que invertirlo intercambia esos colores: la enredadera y las hojas pasan a morado, y las flores moradas a verde. Las flores amarillas quedan salmón, la bufanda color óxido y las paredes rosadas. La puerta y el jean casi no cambian, porque su componente Q es cercana a cero.</aside>
+</section>
+
+<section id="p5" data-transition="fade" style="background:#15181D;color:#EEE9DF;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;color:#E8A93B;letter-spacing:4px;text-transform:uppercase;font-weight:600">Punto 5 · 0.8 · CMY</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:56px;font-weight:700;line-height:1.1">Lineal a trozos en el Amarillo</h2>
+</div>
+<div style="display:flex;flex-direction:row;gap:40px">
+<div style="display:flex;flex-direction:column;gap:8px"><img src="../resultados/p0_original.png" alt="Imagen original" style="width:520px;height:520px;object-fit:cover;border-radius:16px"><p style="font-size:24px;color:#A9B0BB">Original</p></div>
+<div style="display:flex;flex-direction:column;gap:8px"><img src="../resultados/p5_transformada.png" alt="Imagen transformada en CMY: paredes y empedrado lila, puerta más azul, bufanda carmín" style="width:520px;height:520px;object-fit:cover;border-radius:16px"><p style="font-size:24px;color:#A9B0BB">Transformada</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;padding:0 0 0 8px">
+<div style="display:flex;flex-direction:row;gap:24px;align-items:center">
+<svg aria-label="Curva lineal a trozos: de (0,0) a (80,60), de (80,60) a (210,120) y de (210,120) a (255,255), comparada con la identidad" width="200" height="200" viewBox="0 0 220 220" style="width:200px;height:200px"><rect x="0" y="0" width="220" height="220" fill="#1F242C"/><line x1="0" y1="220" x2="220" y2="0" stroke="#5A626E" stroke-width="2" stroke-dasharray="6 6"/><polyline points="0,220 69,168.2 181.2,116.5 220,0" fill="none" stroke="#E8A93B" stroke-width="5"/><circle cx="69" cy="168.2" r="7" fill="#EEE9DF"/><circle cx="181.2" cy="116.5" r="7" fill="#EEE9DF"/></svg>
+<p style="font-size:24px;color:#A9B0BB;line-height:1.5">(80, 60)<br>(210, 120)</p>
+</div>
+<p style="font-size:28px;line-height:1.4">El <b>74 %</b> de los píxeles tiene Y entre 80 y 210: se comprime a 60–120.</p>
+<p style="font-size:28px;line-height:1.4">Menos amarillo = más azul: <b>B medio 0.41 → 0.59</b>.</p>
+<p style="font-size:28px;line-height:1.4">Paredes y empedrado → <b>lila</b>; bufanda → <b>carmín</b>.</p>
+</div>
+</div>
+<aside>Punto 5. En CMY aplicamos al amarillo la lineal a trozos con los puntos 80, 60 y 210, 120. El tramo central comprime y baja el amarillo, y en nuestra imagen el 74 por ciento de los píxeles cae justo en ese tramo. Menos amarillo significa más azul: el azul medio sube de 0.41 a 0.59. Por eso las paredes y el empedrado pasan de crema a lila, la puerta se ve más azul y la bufanda pasa a carmín. Las flores amarillas se conservan, porque su amarillo está por encima de 210.</aside>
+</section>
+
+<section id="p6" data-transition="fade" style="background:#15181D;color:#EEE9DF;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;color:#E8A93B;letter-spacing:4px;text-transform:uppercase;font-weight:600">Punto 6 · 0.8 · HSI</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:56px;font-weight:700;line-height:1.1">Ecualización de la intensidad</h2>
+</div>
+<div style="display:flex;flex-direction:row;gap:40px">
+<div style="display:flex;flex-direction:column;gap:8px"><img src="../resultados/p0_original.png" alt="Imagen original" style="width:520px;height:520px;object-fit:cover;border-radius:16px"><p style="font-size:24px;color:#A9B0BB">Original</p></div>
+<div style="display:flex;flex-direction:column;gap:8px"><img src="../resultados/p6_transformada.png" alt="Imagen con la intensidad ecualizada: mismos colores y sombras más claras" style="width:520px;height:520px;object-fit:cover;border-radius:16px"><p style="font-size:24px;color:#A9B0BB">Transformada</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:24px;padding:0 0 0 8px">
+<p style="font-size:28px;line-height:1.4">Solo se ecualiza <b>I</b>: H y S quedan iguales, <b>los colores no cambian</b>.</p>
+<p style="font-size:28px;line-height:1.4">Las sombras se abren: <b>puerta, jean y escalones</b> con más detalle.</p>
+<p style="font-size:28px;line-height:1.4">Brillo medio <b>0.58 → 0.62</b>; SSIM con la original <b>0.935</b>.</p>
+</div>
+</div>
+<aside>Punto 6. Ecualizar correctamente en HSI significa ecualizar solo la intensidad: si tocáramos el tono o la saturación, cambiaríamos los colores. Por eso la bufanda, la puerta y las flores mantienen exactamente su color. Lo que cambia es el brillo: las sombras se abren y se ve más detalle en las tablas de la puerta, los pliegues del jean y los escalones. El brillo medio sube de 0.58 a 0.62, y es la transformación más fiel a la original, con un SSIM de 0.935.</aside>
+</section>
+
+<section id="p7" data-transition="fade" style="background:#15181D;color:#EEE9DF;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;color:#E8A93B;letter-spacing:4px;text-transform:uppercase;font-weight:600">Punto 7 · 0.5 · RGB</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:56px;font-weight:700;line-height:1.1">Realce laplaciano de 4 vecinos</h2>
+</div>
+<div style="display:flex;flex-direction:row;gap:48px">
+<div style="display:flex;flex-direction:column;gap:8px"><img src="../resultados/p7_zoom.png" alt="Recorte ampliado del rostro y la puerta: a la izquierda la original y a la derecha la filtrada, con bordes más marcados" style="width:1080px;height:533px;object-fit:contain;border-radius:16px"><p style="font-size:24px;color:#A9B0BB">Recorte ampliado · izquierda original, derecha filtrada</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:24px">
+<div style="background:#1F242C;border-radius:16px;padding:24px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;line-height:1.5;color:#C9CED6">w = [0 1 0;<br>1 −4 1;<br>0 1 0]<br>g = f − ∇²f</p>
+</div>
+<p style="font-size:28px;line-height:1.4">Más marcadas: <b>grietas de la puerta</b>, cabello, ojos y dientes.</p>
+<p style="font-size:28px;line-height:1.4">Se amplifica el <b>grano</b> de la pared y el empedrado.</p>
+</div>
+</div>
+<aside>Punto 7. Aplicamos el laplaciano de 4 vecinos a cada canal y restamos el resultado a la imagen. En el recorte ampliado se ve que se refuerzan todos los bordes: las grietas de la pintura de la puerta, los mechones del cabello, los ojos, los dientes y el tejido de la bufanda. El costo es que el filtro también amplifica el ruido: la pared y el empedrado se ven más granulados. El color promedio no cambia.</aside>
+</section>
+
+<section id="p8a" data-section="Punto 8: diagnóstico y corrección del balance de color" data-transition="fade" style="background:#1B1F25;color:#EEE9DF;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;color:#E8A93B;letter-spacing:4px;text-transform:uppercase;font-weight:600">Punto 8 · 0.7 · Diagnóstico</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:56px;font-weight:700;line-height:1.1">Desbalance: déficit de cian</h2>
+</div>
+<div style="display:flex;flex-direction:row;gap:40px">
+<div style="display:flex;flex-direction:column;gap:8px"><img src="../resultados/p8_desbalanceada.png" alt="Imagen desbalanceada con dominante rojiza" style="width:460px;height:460px;object-fit:cover;border-radius:16px"><p style="font-size:24px;color:#A9B0BB">Desbalanceada · SSIM 0.2818</p></div>
+<div style="display:flex;flex-direction:column;gap:8px"><img src="../resultados/p8_objetivo.png" alt="Imagen objetivo" style="width:460px;height:460px;object-fit:cover;border-radius:16px"><p style="font-size:24px;color:#A9B0BB">Objetivo</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:28px">
+<p style="font-size:28px;color:#C9CED6">Media de cada componente CMY</p>
+<table style="font-size:28px;color:#EEE9DF;font-family:'IBM Plex Sans', Arial, sans-serif">
+<tr><th style="width:36%;text-align:left">Canal</th><th style="width:34%;text-align:right">Desbal.</th><th style="width:30%;text-align:right">Objetivo</th></tr>
+<tr><td><span style="color:#E8A93B">Cian</span></td><td style="text-align:right"><span style="color:#E8A93B">81.7</span></td><td style="text-align:right">130.2</td></tr>
+<tr><td>Magenta</td><td style="text-align:right">148.4</td><td style="text-align:right">148.4</td></tr>
+<tr><td>Amarillo</td><td style="text-align:right">139.4</td><td style="text-align:right">139.4</td></tr>
+</table>
+<p style="font-size:28px;line-height:1.4">M y Y son <b>idénticos píxel a píxel</b>. Solo el cian bajó → <b>dominante roja</b>.</p>
+</div>
+</div>
+<aside>Punto 8. La imagen desbalanceada tiene una dominante roja y un SSIM de apenas 0.28 contra el objetivo. Pasamos ambas a CMY y comparamos cada componente: el magenta y el amarillo son idénticos píxel a píxel; solo cambia el cian, con una media de 81.7 contra 130.2. El desbalance es, entonces, un déficit de cian, y como el cian es el complemento del rojo, la imagen se ve rojiza.</aside>
+</section>
+
+<section id="p8b" data-transition="fade" style="background:#1B1F25;color:#EEE9DF;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;color:#E8A93B;letter-spacing:4px;text-transform:uppercase;font-weight:600">Punto 8 · 0.7 · Corrección</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:56px;font-weight:700;line-height:1.1">Gamma inversa sobre el cian</h2>
+</div>
+<div style="display:flex;flex-direction:row;gap:40px">
+<div style="display:flex;flex-direction:column;gap:8px">
+<svg aria-label="Curvas del canal cian: el desbalance aplicado es una potencia 2.5 que queda por debajo de la identidad; la corrección es una potencia 0.4 que queda por encima" width="460" height="460" viewBox="0 0 460 460" style="width:460px;height:460px"><rect x="0" y="0" width="460" height="460" fill="#252B34"/><line x1="0" y1="460" x2="460" y2="0" stroke="#5A626E" stroke-width="2" stroke-dasharray="8 8"/><polyline points="0,460 23,459.8 46,458.5 69,456 92,451.7 115,445.6 138,437.3 161,426.7 184,413.4 207,397.6 230,378.7 253,356.8 276,331.7 299,303.4 322,271.4 345,236 368,196.7 391,153.6 414,106.5 437,55.4 460,0" fill="none" stroke="#E8A93B" stroke-width="6"/><polyline points="0,460 2.3,404.8 6.9,374.3 11.5,354.8 23,321.2 46,276.9 69,244.6 92,218.4 115,195.8 138,175.8 161,157.7 184,141.2 207,125.7 230,111.3 253,97.9 276,85 299,72.9 322,61.2 345,50 368,39.3 391,29 414,19 437,9.3 460,0" fill="none" stroke="#7FA8F0" stroke-width="6"/></svg>
+<p style="font-size:24px;color:#A9B0BB"><span style="color:#E8A93B">■ Desbalance γ = 2.5</span>   <span style="color:#7FA8F0">■ Corrección γ = 0.4</span></p>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px"><img src="../resultados/p8_corregida.png" alt="Imagen corregida, prácticamente igual al objetivo" style="width:460px;height:460px;object-fit:cover;border-radius:16px"><p style="font-size:24px;color:#A9B0BB">Corregida</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:24px">
+<p style="font-size:28px;line-height:1.4">El cian siguió una curva de potencia:</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:28px;color:#E8A93B;background:#252B34;padding:20px 24px;border-radius:12px">C_d = C_o^2.5</p>
+<p style="font-size:28px;line-height:1.4">γ estimado = <b>2.502</b> → se corrige con <b>γ = 1/2.5 = 0.4</b>.</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#7FA8F0;background:#252B34;padding:20px 24px;border-radius:12px">cmy(:,:,1) = transfGamma(cmy(:,:,1), 0.4)</p>
+</div>
+</div>
+<aside>Al graficar el cian desbalanceado contra el del objetivo aparece una curva de potencia: al cian le aplicaron una gamma. Despejando con logaritmos obtuvimos un valor de 2.5. La corrección es la gamma inversa, uno sobre 2.5, es decir 0.4, aplicada solo al cian. Al volver a RGB, la dominante roja desaparece.</aside>
+</section>
+
+<section id="ssim" data-transition="fade" style="background:#E8A93B;color:#15181D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:40px">
+<p style="font-size:32px;letter-spacing:4px;text-transform:uppercase;font-weight:600;color:#3A2A0C">SSIM corregida vs. objetivo</p>
+<h1 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:240px;font-weight:700;line-height:1">0.9979</h1>
+<p style="font-size:40px;line-height:1.4;color:#2A2010">Desde 0.2818, con un solo ajuste: γ = 0.4 sobre el cian. Supera el 0.99 que pide el enunciado.</p>
+<aside>El SSIM entre la imagen corregida y el objetivo es 0.9979, por encima del 0.99 que pedía el enunciado. No llega a 1 porque la gamma original, en 8 bits, aplastó los niveles más bajos del cian a cero, y esa información no se puede recuperar.</aside>
+</section>
+
+<section id="cierre" data-section="Cierre" data-transition="fade" style="background:#15181D;color:#EEE9DF;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
+<h1 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:112px;font-weight:700;line-height:1.05">Gracias</h1>
+<div style="display:flex;flex-direction:row;gap:24px;flex-wrap:wrap">
+<p style="font-size:28px;background:#252B34;padding:14px 28px;border-radius:999px">YCbCr: el rojo se invierte a verde</p>
+<p style="font-size:28px;background:#252B34;padding:14px 28px;border-radius:999px">YIQ: verde ↔ morado y más oscura</p>
+<p style="font-size:28px;background:#252B34;padding:14px 28px;border-radius:999px">CMY: menos amarillo, más azul</p>
+<p style="font-size:28px;background:#252B34;padding:14px 28px;border-radius:999px">HSI: sombras abiertas, mismos colores</p>
+<p style="font-size:28px;background:#252B34;padding:14px 28px;border-radius:999px">Laplaciano: más bordes y más ruido</p>
+<p style="font-size:28px;background:#252B34;padding:14px 28px;border-radius:999px">Balance: γ = 0.4 en el cian</p>
+</div>
+<p style="font-size:28px;color:#A9B0BB">Código: <a href="https://github.com/Agudelo-J-M/Momento-Evaluativo-3-Vision-Artificial">github.com/Agudelo-J-M/Momento-Evaluativo-3-Vision-Artificial</a></p>
+<aside>En resumen: en YCbCr el rojo se invirtió hacia el verde; en YIQ la imagen se oscureció y se intercambiaron el verde y el morado; en CMY la escena se volvió más azul; en HSI se abrieron las sombras sin cambiar los colores; el laplaciano reforzó los bordes y también el ruido; y corregimos el balance con una gamma de 0.4 sobre el cian. Muchas gracias, profesor.</aside>
+</section>
+
+</div>
+<div id="notes"></div>
+<div id="hud"></div>
+<script>
+const ss=[...document.querySelectorAll('section')], stage=document.getElementById('stage'),
+      hud=document.getElementById('hud'), notes=document.getElementById('notes');
+let i=0; try{ i=Math.min(ss.length-1, Math.max(0, parseInt(location.hash.slice(1))-1||0)); }catch(e){}
+function fit(){ const s=Math.min(innerWidth/1920, innerHeight/1080); stage.style.transform='scale('+s+') translate(-50%,-50%)'; }
+function show(n){ i=Math.max(0,Math.min(ss.length-1,n)); ss.forEach((s,k)=>s.classList.toggle('on',k===i));
+  hud.textContent=(i+1)+' / '+ss.length+'  ·  ← →  ·  N notas  ·  F pantalla completa';
+  const a=ss[i].querySelector('aside'); notes.textContent=a?a.textContent.trim():''; history.replaceState(null,'','#'+(i+1)); }
+addEventListener('resize',fit);
+addEventListener('keydown',e=>{
+  if(['ArrowRight','PageDown',' ','Enter'].includes(e.key)) show(i+1);
+  else if(['ArrowLeft','PageUp','Backspace'].includes(e.key)) show(i-1);
+  else if(e.key==='Home') show(0); else if(e.key==='End') show(ss.length-1);
+  else if(e.key==='n'||e.key==='N') notes.style.display=notes.style.display==='block'?'none':'block';
+  else if(e.key==='f'||e.key==='F') document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();
+});
+addEventListener('click',e=>{ if(e.target.closest('a')||e.target.closest('#notes')) return; show(e.clientX<innerWidth/3?i-1:i+1); });
+fit(); show(i);
+</script>
+</body></html>

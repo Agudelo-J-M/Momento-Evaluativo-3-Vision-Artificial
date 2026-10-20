@@ -89,6 +89,11 @@ I7  = uint8(f7 - lap);                    % uint8 recorta a [0,255]
 mostrarPar(I, I7, 'Punto 7: realce laplaciano de 4 vecinos');
 imwrite(I7, fullfile(dirRes, 'p7_filtrada.png'));
 
+% Recorte ampliado (rostro y puerta) para comparar el realce de bordes
+filas = 300:700; cols = 350:750;
+imwrite([I(filas, cols, :), zeros(numel(filas), 10, 3, 'uint8'), I7(filas, cols, :)], ...
+        fullfile(dirRes, 'p7_zoom.png'));
+
 %% PUNTO 8 - Correccion del balance de color
 dirImg   = fullfile(raiz, 'imagenes');
 desb     = imread(fullfile(dirImg, 'imagen_desbalanceada.tiff'));
@@ -136,6 +141,7 @@ tiledlayout(1, 3, 'TileSpacing', 'compact');
 nexttile; imshow(desb);      title(sprintf('Desbalanceada (SSIM = %.4f)', ssim(desb, objetivo)));
 nexttile; imshow(objetivo);  title('Objetivo');
 nexttile; imshow(corregida); title(sprintf('Corregida (SSIM = %.4f)', ssim(corregida, objetivo)));
+imwrite(desb,      fullfile(dirRes, 'p8_desbalanceada.png'));
 imwrite(objetivo,  fullfile(dirRes, 'p8_objetivo.png'));
 imwrite(corregida, fullfile(dirRes, 'p8_corregida.png'));
 
